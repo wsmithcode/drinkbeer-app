@@ -1,0 +1,45 @@
+services:
+
+  api:
+    container_name: drinkbeer-api
+    depends_on:
+      database:
+        condition: service_healthy
+    build:
+      context: ./drinkbeer-api
+      dockerfile: Dockerfile
+      target: production
+    environment:
+      PORT: ${API_PORT}
+      DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@database:${POSTGRES_PORT:-5432}/${POSTGRES_DB}
+    ports:
+      - "${API_PORT}:3000"
+    networks:
+      - drinkbeer-network
+
+  database:
+    container_name: drinkbeer-db
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - drinkbeer-db-data:/var/lib/postgresql/data
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    restart: unless-stopped
+    networks:
+      - drinkbeer-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  drinkbeer-db-data:
+
+networks:
+  drinkbeer-network:
+    driver: bridge
