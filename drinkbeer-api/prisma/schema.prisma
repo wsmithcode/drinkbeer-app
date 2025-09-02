@@ -1,0 +1,80 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid()) @db.Uuid
+  username String @unique
+  email String @unique
+  password String
+  avatar String?
+  lastLoginAt DateTime?
+  isVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  groupMember GroupMember[]
+  groupInvitation GroupInvitation[] @relation("Invitations")
+  groupInvitationSent GroupInvitation[] @relation("SentInvitations")
+}
+
+model Group {
+  id String @id @default(uuid()) @db.Uuid
+  name String
+  description String?
+  avatar String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  groupMember GroupMember[]
+  groupInvitation GroupInvitation[]
+
+  @@index([name])
+}
+
+model GroupMember {
+  userId String @db.Uuid
+  groupId String @db.Uuid
+  role GroupRole @default(MEMBER)
+  joinedAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@id([userId, groupId])
+  @@index([userId])
+  @@index([groupId])
+}
+
+model GroupInvitation {
+  id String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  groupId String @db.Uuid
+  invitedBy String @db.Uuid
+  expireDate DateTime @default(dbgenerated("NOW() + INTERVAL '7 days'"))
+  status GroupInvitationStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  user User @relation("Invitations", fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  invitedByUser User @relation("SentInvitations", fields: [invitedBy], references: [id], onDelete: SetNull)
+
+
+  @@unique([userId, groupId])
+  @@index([status, expireDate])
+
+}
+
+enum GroupRole {
+  OWNER
+  MEMBER
+}
+
+enum GroupInvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  EXPIRED
+}
