@@ -17,6 +17,7 @@ services:
       - /app/node_modules
     ports:
       - "8080:8080"
+    restart: unless-stopped
     networks:
       - drinkbeer-network
 
@@ -39,6 +40,24 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+
+  pgadmin:
+    container_name: drinkbeer-pgadmin
+    depends_on:
+      database:
+        condition: service_started
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - ./docker/pgadmin/servers.json:/pgadmin4/servers.json:ro
+    ports:
+      - "${PGADMIN_PORT:-80}:80"
+    restart: unless-stopped
+    networks:
+      - drinkbeer-network
 
 volumes:
   drinkbeer-db-data:
