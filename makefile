@@ -1,6 +1,6 @@
 start-dev:
 	@echo "Starting development environment"
-	docker compose -f docker-compose.dev.yml up -d 
+	docker compose -f docker-compose.dev.yml up --build -d 
 
 stop-dev:
 	@echo "Stopping development environment"
