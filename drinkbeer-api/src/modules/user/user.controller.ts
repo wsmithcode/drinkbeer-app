@@ -1,6 +1,7 @@
-import { Controller, Param, Get } from '@nestjs/common';
+import { Controller, Param, Body, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UUIDParamDto } from '@common/dto/uuid-param.dto';
+import { CreateUserDto } from './dto/create-user.dto';
 
 @Controller('users')
 export class UserController {
@@ -15,6 +16,11 @@ export class UserController {
     @Get(':id')
     async getUserById(@Param() params: UUIDParamDto) {
         return await this.userService.getUserById(params.id);
+    }
+
+    @Post()
+    async createUser(@Body() createUserDto: CreateUserDto ) {
+        return await this.userService.createUser(createUserDto)
     }
 
 }
