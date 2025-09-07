@@ -12,6 +12,9 @@ export class UserResponseDto {
     email: string;
 
     @Expose()
+    password: string
+
+    @Expose()
     avatar?: string
 
     @Expose()
