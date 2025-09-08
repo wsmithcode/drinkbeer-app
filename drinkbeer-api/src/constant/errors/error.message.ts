@@ -4,7 +4,7 @@ export const AppErrors = {
         ALREADY_EXIST: (type: string) => `User with this ${type} already exist`
     },
     Login: {
-        FAIL: "Incorrect username or password. Try again"
+        FAIL: "Incorrect username or password. Try again !"
     },
     ID: {
         UUID_WRONG_FORMAT: `ID must be a valid UUID`
