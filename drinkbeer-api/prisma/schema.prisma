@@ -68,11 +68,12 @@ model GroupInvitation {
 
 model Cocktail {
   id String @id @default(uuid()) @db.Uuid
+  idDrink String @unique
   name String 
   category String
   pictureUrl String
   instructions String
-  isAlcoholic Boolean
+  isAlcoholic String 
   glassType String
   ingredients String[]
   measurements String[]

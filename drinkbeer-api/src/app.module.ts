@@ -6,6 +6,7 @@ import { UserModule } from './modules/user/user.module'
 import { AuthModule } from '@modules/auth/auth.module';
 import { ConfigModule } from '@nestjs/config'
 import { CocktailsModule } from './modules/cocktails/cocktails.module';
+import { AlcoholImportModule } from './modules/alcoholImport/alcoholImport.module';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { CocktailsModule } from './modules/cocktails/cocktails.module';
       isGlobal: true,
       envFilePath: '.env'
     }),
-    PrismaModule, UserModule, AuthModule, CocktailsModule ],
+    PrismaModule, UserModule, AuthModule, CocktailsModule, AlcoholImportModule],
   controllers: [ AppController ],
   providers: [ AppService ],
 })

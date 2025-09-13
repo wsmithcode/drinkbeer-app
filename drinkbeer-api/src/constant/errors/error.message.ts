@@ -8,5 +8,9 @@ export const AppErrors = {
     },
     ID: {
         UUID_WRONG_FORMAT: `ID must be a valid UUID`
+    },
+    ALCOHOLIMPORT: {
+        FAIL: "Failed to import cocktails data",
+        API_KEY_MISSING: (provider: string) => `API key form ${provider} is missing in the environment variables`
     }
 }

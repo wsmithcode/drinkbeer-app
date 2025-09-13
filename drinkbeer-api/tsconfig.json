@@ -21,7 +21,7 @@
       "@modules/*": ["src/modules/*"],
       "@common/*": ["src/common/*"],
       "@prisma/client": ["./prisma/client"],
-      "@prisma/*": ["src/modules/prisma/*"]
+      "@prisma/*": ["src/modules/prisma/*"],
     }
   }
 }
