@@ -8,40 +8,40 @@ datasource db {
 }
 
 model User {
-  id String @id @default(uuid()) @db.Uuid
-  username String @unique
-  email String @unique
-  password String
-  avatar String?
-  lastLoginAt DateTime?
-  isVerified Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  groupMember GroupMember[]
-  groupInvitation GroupInvitation[] @relation("Invitations")
+  id                  String            @id @default(uuid()) @db.Uuid
+  username            String            @unique
+  email               String            @unique
+  password            String
+  avatar              String?
+  lastLoginAt         DateTime?
+  isVerified          Boolean           @default(false)
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  groupMember         GroupMember[]
+  groupInvitation     GroupInvitation[] @relation("Invitations")
   groupInvitationSent GroupInvitation[] @relation("SentInvitations")
 }
 
 model Group {
-  id String @id @default(uuid()) @db.Uuid
-  name String
-  description String?
-  avatar String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  groupMember GroupMember[]
+  id              String            @id @default(uuid()) @db.Uuid
+  name            String
+  description     String?
+  avatar          String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  groupMember     GroupMember[]
   groupInvitation GroupInvitation[]
 
   @@index([name])
 }
 
 model GroupMember {
-  userId String @db.Uuid
-  groupId String @db.Uuid
-  role GroupRole @default(MEMBER)
-  joinedAt DateTime @default(now())
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId   String    @db.Uuid
+  groupId  String    @db.Uuid
+  role     GroupRole @default(MEMBER)
+  joinedAt DateTime  @default(now())
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group    Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
 
   @@id([userId, groupId])
   @@index([userId])
@@ -49,36 +49,45 @@ model GroupMember {
 }
 
 model GroupInvitation {
-  id String @id @default(uuid()) @db.Uuid
-  userId String @db.Uuid
-  groupId String @db.Uuid
-  invitedBy String @db.Uuid
-  expireDate DateTime @default(dbgenerated("NOW() + INTERVAL '7 days'"))
-  status GroupInvitationStatus @default(PENDING)
-  createdAt DateTime @default(now())
-  user User @relation("Invitations", fields: [userId], references: [id], onDelete: Cascade)
-  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  invitedByUser User @relation("SentInvitations", fields: [invitedBy], references: [id], onDelete: SetNull)
-
+  id            String                @id @default(uuid()) @db.Uuid
+  userId        String                @db.Uuid
+  groupId       String                @db.Uuid
+  invitedBy     String                @db.Uuid
+  expireDate    DateTime              @default(dbgenerated("NOW() + INTERVAL '7 days'"))
+  status        GroupInvitationStatus @default(PENDING)
+  createdAt     DateTime              @default(now())
+  user          User                  @relation("Invitations", fields: [userId], references: [id], onDelete: Cascade)
+  group         Group                 @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  invitedByUser User                  @relation("SentInvitations", fields: [invitedBy], references: [id], onDelete: SetNull)
 
   @@unique([userId, groupId])
   @@index([status, expireDate])
-
 }
 
 model Cocktail {
-  id String @id @default(uuid()) @db.Uuid
-  idDrink String @unique
-  name String 
-  category String
-  pictureUrl String
+  id           String   @id @default(uuid()) @db.Uuid
+  idDrink      String   @unique
+  name         String
+  category     String
+  pictureUrl   String
   instructions String
-  isAlcoholic String 
-  glassType String
-  ingredients String[]
+  isAlcoholic  String
+  glassType    String
+  ingredients  String[]
   measurements String[]
-  createdAt DateTime @default (now())
-  updatedAt DateTime @updatedAt
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Beer {
+  id          String   @id @default(uuid()) @db.Uuid
+  idBeer      String?  @unique
+  name        String   
+  brands      String?
+  category    String[]
+  pictureUrl  String?
+  country     String?
+  abv         String?
 }
 
 enum GroupRole {
