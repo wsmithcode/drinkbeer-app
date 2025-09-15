@@ -63,7 +63,7 @@ model GroupInvitation {
   createdAt     DateTime              @default(now())
   user          User                  @relation("Invitations", fields: [userId], references: [id], onDelete: Cascade)
   group         Group                 @relation(fields: [groupId], references: [id], onDelete: Cascade)
-  invitedByUser User                  @relation("SentInvitations", fields: [invitedBy], references: [id], onDelete: SetNull)
+  invitedByUser User                  @relation("SentInvitations", fields: [invitedBy], references: [id], onDelete: Cascade)
 
   @@unique([userId, groupId])
   @@index([status, expireDate])
