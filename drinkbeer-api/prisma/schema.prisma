@@ -17,6 +17,7 @@ model User {
   isVerified          Boolean           @default(false)
   createdAt           DateTime          @default(now())
   updatedAt           DateTime          @updatedAt
+  ownedGroups         Group[]           @relation("GroupOwner")
   groupMember         GroupMember[]
   groupInvitation     GroupInvitation[] @relation("Invitations")
   groupInvitationSent GroupInvitation[] @relation("SentInvitations")
@@ -27,11 +28,15 @@ model Group {
   name            String
   description     String?
   avatar          String?
+  ownerId         String            @db.Uuid
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   groupMember     GroupMember[]
   groupInvitation GroupInvitation[]
 
+  owner User @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+
+  @@unique([name, ownerId])
   @@index([name])
 }
 
@@ -80,14 +85,14 @@ model Cocktail {
 }
 
 model Beer {
-  id          String   @id @default(uuid()) @db.Uuid
-  idBeer      String?  @unique
-  name        String   
-  brands      String?
-  category    String[]
-  pictureUrl  String?
-  country     String?
-  abv         String?
+  id         String   @id @default(uuid()) @db.Uuid
+  idBeer     String?  @unique
+  name       String
+  brands     String?
+  category   String[]
+  pictureUrl String?
+  country    String?
+  abv        String?
 }
 
 enum GroupRole {
