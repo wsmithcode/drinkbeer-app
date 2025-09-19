@@ -12,7 +12,7 @@ export const AppErrors = {
     FAIL: 'Incorrect username or password. Try again !',
   },
   ID: {
-    UUID_WRONG_FORMAT: `ID must be a valid UUID`,
+    UUID_WRONG_FORMAT: `ID must be a valid UUID. Please, Try Again`,
   },
   DATABASE: {
     SCHEMA_ERROR: 'Configuration Error',
