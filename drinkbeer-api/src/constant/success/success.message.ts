@@ -1,5 +1,5 @@
 export const AppSuccess = {
     ALCOHOLIMPORT: {
-        IMPORT_COCKTAIL: "Cocktails data import completed successfully."
+        IMPORT_COCKTAIL: "Cocktails datas import completed successfully."
     }
 }
